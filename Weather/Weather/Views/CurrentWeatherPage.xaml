@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             x:Class="Weather.Views.CurrentWeatherPage"
+             xmlns:local="clr-namespace:Weather.ViewModels"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms">
+    <ContentPage.BindingContext>
+        <local:CurrentWeatherPageModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ScrollView x:Name="MainScrollView" HeightRequest="2000" Scrolled="OnScrollViewScrolled">
+            <StackLayout HeightRequest="2000" BackgroundColor="CornflowerBlue">
+                <Grid HeightRequest="300" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackLayout Orientation="Horizontal">
+                        <ImageButton Source="menu.png" Margin="20" WidthRequest="23" 
+                                 HeightRequest="15" HorizontalOptions="Start" VerticalOptions="Start" />
+                        <StackLayout Orientation="Vertical" >
+                            <Label Text="{Binding LocationCity}" FontSize="30" TextColor="White" />
+                            <Label Text="{Binding LocationCountry}" FontSize="20" TextColor="White" />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Grid.Row="1">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Image Source="{Binding CurrentIcon}" WidthRequest="67" HeightRequest="50"/>
+                            <Label Text="{Binding CurrentTemp, StringFormat='{0}°'}" FontSize="90" TextColor="White" HorizontalOptions="Center" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Text="{Binding CurrentMaxTemp, StringFormat='{0}°'}" FontSize="30" TextColor="White" HorizontalOptions="Center" />
+                            <Label Text="/" FontSize="30" TextColor="White" HorizontalOptions="Center" />
+                            <Label Text="{Binding CurrentMinTemp, StringFormat='{0}°'}" FontSize="30" TextColor="#bacdd9" HorizontalOptions="Center" />
+                        </StackLayout>
+                    </StackLayout>
+                </Grid>
+                <Label Text="openweathermap.org" FontSize="15" Margin="10,50,0,0" HorizontalOptions="End"/>
+                <BoxView HeightRequest="1" BackgroundColor="White" Opacity="0.5"/>
+                <ScrollView Orientation="Horizontal" WidthRequest="1000" HeightRequest="130" Margin="0">
+                    <StackLayout BindableLayout.ItemsSource="{Binding Hours}"
+                                    Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent" HeightRequest="130">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                                    <Label Text="{Binding hour}" FontSize="15" Margin="10" HorizontalOptions="Center"/>
+                                    <Image Source="{Binding icon}" WidthRequest="35" HeightRequest="25" Margin="5,0" />
+                                    <Label Text="{Binding temp, StringFormat='{0}°'}" FontSize="20" Margin="10" HorizontalOptions="Center"/>
+                                </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+                <BoxView HeightRequest="1" BackgroundColor="White" Opacity="0.5"/>
+                <StackLayout BindableLayout.ItemsSource="{Binding Days}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout >
+                                <Grid HeightRequest="100" BackgroundColor="Transparent" RowSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="1"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Margin="10,0" Grid.Row="0" Grid.Column="0" Text="{Binding day}"
+                                               VerticalOptions="Center" FontSize="15" TextColor="White"/>
+                                    <StackLayout Grid.Row="0" Grid.Column="1" VerticalOptions="Center">
+                                        <Image Grid.Column="1" Source="{Binding icon}" WidthRequest="35" HeightRequest="25"/>
+                                    </StackLayout>
+                                    <StackLayout Grid.Row="0" Grid.Column="2" Orientation="Horizontal" 
+                                                   Padding="10" HorizontalOptions="End" VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding temp_max, StringFormat='{0}° /'}" FontSize="20" TextColor="White"/>
+                                        <Label Text="{Binding temp_min, StringFormat='{0}°'}" FontSize="20" TextColor="#bacdd9"/>
+                                    </StackLayout>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" BackgroundColor="White" Opacity="0.5"/>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+                <Label Text="Humidity" FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout>
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <skia:SKCanvasView x:Name="humidityView" Grid.Column="0"
+                                           PaintSurface="humidityView_PaintSurface" HeightRequest="200" WidthRequest="200"/>
+                        <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Label Text="Humidity:" TextColor="White"/>
+                            <Label x:Name="humidityValue" Text="{Binding Humidity}" TextColor="White"/>
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+                <BoxView Grid.Row="1"  HeightRequest="1" BackgroundColor="White" Opacity="0.5"/>
+                <Label Text="Sun's height" FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+                <skia:SKCanvasView x:Name="sunView" Grid.Column="0"
+                                           PaintSurface="sunView_PaintSurface" HeightRequest="200" WidthRequest="700"/>
+                <Label x:Name="sunriseString" Text="{Binding Sunrise.time_string}" IsVisible="false"/>
+                <Label x:Name="sunriseSec" Text="{Binding Sunrise.time_sec}" IsVisible="false"/>
+                <Label x:Name="sunsetString" Text="{Binding Sunset.time_string}" IsVisible="false"/>
+                <Label x:Name="sunsetSec" Text="{Binding Sunset.time_sec}" IsVisible="false"/>
+                <BoxView Grid.Row="1" Grid.ColumnSpan="3" HeightRequest="1" BackgroundColor="White" Opacity="0.5"/>
+                <Label Text="Wind" FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout>
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <skia:SKCanvasView x:Name="windView" Grid.Column="0"
+                                           PaintSurface="windView_PaintSurface" HeightRequest="200" WidthRequest="400"/>
+                        <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center">
+                            <Label Text="{Binding WindSpeed, StringFormat='Speed: {0}'}" TextColor="White"/>
+                            <Label Text="{Binding WindDeg, StringFormat='Direction: {0}'}" TextColor="White" />
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+                <Label Text="Icons made by: " FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+                <Label Text="www.freepik.com" FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+                <Label Text="www.flaticon.com" FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+                <Label Text="www.flaticon.com/authors/iconixar" FontSize="15" Margin="10,0,0,0" HorizontalOptions="Start" TextColor="White"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
