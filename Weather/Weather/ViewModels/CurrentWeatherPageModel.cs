@@ -158,7 +158,7 @@ namespace Weather.ViewModels
 
         public async void GetWeatherData()
         {
-            string url = $"https://api.openweathermap.org/data/2.5/onecall?lat={Latitude}&lon={Longitude}&exclude=minutely&appid=6634c692403514c7081d9748c053f716&units=metric";
+            string url = $"https://api.openweathermap.org/data/2.5/onecall?lat={Latitude}&lon={Longitude}&exclude=minutely&appid=[YOUR API key]&units=metric";
 
             var response = await ApiCaller.Get(url);
             
